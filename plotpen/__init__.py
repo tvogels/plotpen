@@ -50,6 +50,8 @@ figure = Figure("svg")(
     xmlns="http://www.w3.org/2000/svg",
     xmlns__xlink="http://www.w3.org/1999/xlink",
     version=1.1,
+    font_family="-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica, helvetica neue, ubuntu, roboto, noto, segoe ui, arial, sans-serif",
+    stroke_linecap="round",
 )
 
 
@@ -66,7 +68,7 @@ def clip(children, box, slack: float = 2.0) -> svg.G:
                 height=box.height + 2 * slack,
                 x=box.x(0) - slack,
                 y=box.y(1) - slack,
-                fill="#333",
+                fill="#1b1e23",
             )
         ),
         svg.g(clip_path=f"url(#{unique_id})", key=random.random())(*children),
@@ -134,7 +136,7 @@ def translate(x: float, y: float) -> svg.G:
     return svg.g(transform=f"translate({x} {y})")
 
 
-def x_axis(xscale, box, color="#333", **kwargs) -> svg.G:
+def x_axis(xscale, box, color="#1b1e23", **kwargs) -> svg.G:
     return svg.g(id="x-axis", **kwargs)(
         multi_vline(
             id="x-ticks",
@@ -151,7 +153,7 @@ def x_axis(xscale, box, color="#333", **kwargs) -> svg.G:
     )
 
 
-def y_axis(yscale, box, color="#333", **kwargs) -> svg.G:
+def y_axis(yscale, box, color="#1b1e23", **kwargs) -> svg.G:
     return svg.g(id="y-axis", **kwargs)(
         multi_hline(
             id="y-ticks",
@@ -262,10 +264,16 @@ def histogram(yy, xx, box: Box, ndigits=0, **kwargs):
     #     for y, x1, x2 in zip(yy, xx[:-1], xx[1:])
     # )
 
+
 def hline(value: float, box: Box, **kwargs) -> svg.Line:
-    kwargs = {"stroke": "#333", **kwargs}
-    return svg.line(x1=box.left, x2=box.right, y1=box.y(value), y2=box.y(value), **kwargs)
+    kwargs = {"stroke": "#1b1e23", **kwargs}
+    return svg.line(
+        x1=box.left, x2=box.right, y1=box.y(value), y2=box.y(value), **kwargs
+    )
+
 
 def vline(value: float, box: Box, **kwargs) -> svg.Line:
-    kwargs = {"stroke": "#333", **kwargs}
-    return svg.line(x1=box.x(value), x2=box.x(value), y1=box.bottom, y2=box.top, **kwargs)
+    kwargs = {"stroke": "#1b1e23", **kwargs}
+    return svg.line(
+        x1=box.x(value), x2=box.x(value), y1=box.bottom, y2=box.top, **kwargs
+    )
