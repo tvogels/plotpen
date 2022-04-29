@@ -1723,7 +1723,10 @@ for _name, _lut in _lut_dict.items():
 
     _cmap = colors.ListedColormap(_lut, _name) 
     _cmap_r = colors.ListedColormap(_lut[::-1], _name + "_r")  
-    mpl_cm.register_cmap(_name, _cmap)
-    mpl_cm.register_cmap(_name + "_r", _cmap_r)
+    try:
+        mpl_cm.register_cmap(_name, _cmap)
+        mpl_cm.register_cmap(_name + "_r", _cmap_r)
+    except UserWarning:  # already defined
+        pass
 
 del colors, mpl_cm, SimpleNamespace
