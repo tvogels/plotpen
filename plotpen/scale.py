@@ -16,10 +16,11 @@ T = TypeVar("T", float, np.ndarray)
 class ScaleLinear:
     def __init__(
         self,
-        domain: list[float],
+        min: float,
+        max: float,
         range: Optional[list[float]] = None,
     ):
-        self.domain = domain
+        self.domain = [min, max]
         self.range = range
 
     def __call__(self, value: T) -> T:
@@ -37,10 +38,8 @@ class ScaleLinear:
         return _ticks(min, max, count)
 
     def nice(self) -> "ScaleLinear":
-        """
-        Start and end the domain at nice round numbers
-        """
-        return ScaleLinear(nice_domain(self.domain), self.range)
+        """Start and end the domain at nice round numbers"""
+        return ScaleLinear(*nice_domain(self.domain), range=self.range)
 
     def is_major(self, tick: float) -> bool:
         return True
@@ -48,14 +47,18 @@ class ScaleLinear:
 
 class ScaleLog:
     def __init__(
-        self, domain: list[float], range: Optional[list[float]] = None, base: float = 10
+        self,
+        min: float,
+        max: float,
+        range: Optional[list[float]] = None,
+        base: float = 10,
     ):
-        self.domain = domain
+        self.domain = [min, max]
         self.range = range
         self.base = base
         lbase = log(base)
-        self.lmin = snap_to_int(log(domain[0]) / lbase)
-        self.lmax = snap_to_int(log(domain[1]) / lbase)
+        self.lmin = snap_to_int(log(min) / lbase)
+        self.lmax = snap_to_int(log(max) / lbase)
 
     def __call__(self, value: T) -> T:
         if isinstance(value, np.ndarray):
@@ -147,7 +150,7 @@ class ScaleLog:
         if reverse:
             new_domain = list(reversed(new_domain))
 
-        return ScaleLog(new_domain, self.range, base)
+        return ScaleLog(*new_domain, range=self.range, base=base)
 
 
 class ScaleColor(ScaleLinear):

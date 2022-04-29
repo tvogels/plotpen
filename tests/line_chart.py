@@ -8,14 +8,14 @@ def main():
     x = np.linspace(0, 10, 100)
     y = 3 + (x - 3) ** 2 + np.sin(x * 7)
 
-    xscale = pp.scale.linear(pp.span(x)).nice()
-    yscale = pp.scale.linear(pp.span(y)).nice()
+    xscale = pp.scale.linear(*pp.span(x)).nice()
+    yscale = pp.scale.linear(*pp.span(y)).nice()
 
     layout = pp.layout(width=704)(
         pp.div(id="main", margin="55 45 50 70", flex_grow=1, aspect_ratio=2),
     )
 
-    box = layout["/main"].box
+    box = layout["/main"]
     text = svg.text(font_size=10, fill="#1b1e23")
 
     fig = pp.figure(width=layout.width, height=layout.height)(
