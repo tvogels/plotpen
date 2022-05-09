@@ -1,3 +1,4 @@
+import os
 import subprocess
 import tempfile
 from math import ceil
@@ -5,21 +6,31 @@ from math import ceil
 
 def svg_to_pdf(svg: str, filename: str):
     """Convert SVG to PDF using headless Chrome"""
-
+    filename = os.path.realpath(filename)
+    create_dir_if_inexistent(filename)
     chrome = locate_chrome_executable()
+
+    # Make sure we can open the file for writing
+    with open(filename, "wb") as fp:
+        pass
 
     with tempfile.NamedTemporaryFile("w", suffix=".html") as fp:
         fp.write(create_html(svg))
         fp.flush()
-        subprocess.check_output(
+        subprocess.check_call(
             [chrome, "--headless", "--disable-gpu", f"--print-to-pdf={filename}", fp.name],
             stderr=subprocess.DEVNULL,
         )
 
 def svg_to_png(svg, filename: str):
     """Convert SVG to PDF using headless Chrome"""
-
+    filename = os.path.realpath(filename)
+    create_dir_if_inexistent(filename)
     chrome = locate_chrome_executable()
+
+    # Make sure we can open the file for writing
+    with open(filename, "wb") as fp:
+        pass
 
     width = ceil(svg.attributes["width"])
     height = ceil(svg.attributes["height"])
@@ -46,6 +57,11 @@ def locate_chrome_executable():
 
     raise RuntimeError("Cannot find chrome")
     
+
+def create_dir_if_inexistent(filename):
+    dirname = os.path.dirname(os.path.realpath(filename))
+    if not os.path.isdir(dirname):
+        os.makedirs(dirname)
 
 
 def create_html(svg):

@@ -1,4 +1,4 @@
-from math import ceil, floor, log
+from math import ceil, floor, log as _log
 from typing import Any, Literal, Optional, TypeVar
 
 import numpy as np
@@ -56,23 +56,20 @@ class ScaleLog:
         self.domain = [min, max]
         self.range = range
         self.base = base
-        lbase = log(base)
-        self.lmin = snap_to_int(log(min) / lbase)
-        self.lmax = snap_to_int(log(max) / lbase)
+        lbase = _log(base)
+        self.lmin = snap_to_int(_log(min) / lbase)
+        self.lmax = snap_to_int(_log(max) / lbase)
 
     def __call__(self, value: T) -> T:
-        if isinstance(value, np.ndarray):
-            logval = np.log(value)
-        else:
-            logval = log(value)
+        logval = np.log(value)
 
-        position = 1 - (logval / log(self.base) - self.lmax) / (self.lmin - self.lmax)
+        position = 1 - (logval / _log(self.base) - self.lmax) / (self.lmin - self.lmax)
 
         if self.range is not None:
             a, b = self.range
-            return position * b + (1 - position) * a
+            return position * b + (1 - position) * a  # type: ignore
         else:
-            return position
+            return position  # type: ignore
 
     def ticks(self, count: int = 10, type: TickType = "all") -> list[float]:
         """
@@ -118,7 +115,7 @@ class ScaleLog:
             z = [pows(t) for t in _ticks(i, j, min(int(j - i), n))]
 
         def is_major(tick):
-            i = tick / pows(round(log(tick) / log(base)))
+            i = tick / pows(round(_log(tick) / _log(base)))
             if i * base < base - 0.5:
                 i *= base
             return abs(i - 1) < 1e-3
@@ -138,8 +135,8 @@ class ScaleLog:
         Start and end the domain at nice round numbers
         """
         base = self.base
-        lbase = log(base)
-        logs = lambda x: log(x) / lbase
+        lbase = _log(base)
+        logs = lambda x: _log(x) / lbase
 
         x0, x1 = self.domain
         reverse = x1 < x0
@@ -173,3 +170,8 @@ def snap_to_int(number, eps=1e-12) -> float:
         return rounded
     else:
         return number
+
+
+linear = ScaleLinear
+log = ScaleLog
+color = ScaleColor

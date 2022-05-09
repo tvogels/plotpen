@@ -2,7 +2,6 @@ from types import SimpleNamespace
 from matplotlib import colors, cm as mpl_cm
 
 
-
 tab10 = [
     "#1f77b4",
     "#ff7f0e",
