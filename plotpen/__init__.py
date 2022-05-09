@@ -242,7 +242,7 @@ def matshow(array: np.ndarray, box: BoxResolved, cmap: str = "flare", autoscale:
     img = matrix_to_image(array, cmap, autoscale=autoscale, resolution=resolution)
     return image(
         img,
-        box: BoxResolved,
+        box,
         preserveAspectRatio="none",
         style="-ms-interpolation-mode: nearest-neighbor; image-rendering:-moz-crisp-edges; image-rendering: pixelated;",
     )
