@@ -258,15 +258,6 @@ def histogram(yy, xx, box: BoxResolved, ndigits=0, **kwargs):
         entries.append(f"L{round(box.x(x2), ndigits)} {yval}")
     entries.append(f"L{round(box.x(xx[-1]), ndigits)} {box.y(0)} Z")
     return svg.path(d=" ".join(entries), **kwargs)
-    # return svg.g(**kwargs)(
-    #     svg.rect(
-    #         x=round(box.x(x1), ndigits),
-    #         width=round(box.x(x2) - box.x(x1), ndigits),
-    #         y=round(box.y(y), ndigits),
-    #         height=round(box.y(0) - box.y(y), ndigits),
-    #     )
-    #     for y, x1, x2 in zip(yy, xx[:-1], xx[1:])
-    # )
 
 
 def hline(value: float, box: BoxResolved, **kwargs) -> svg.Line:
