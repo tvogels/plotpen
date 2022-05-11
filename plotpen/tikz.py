@@ -7,6 +7,7 @@ from functools import lru_cache
 from hashlib import md5
 from io import BytesIO
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from types import GeneratorType
 from typing import Generator
 
 from domtree import Node
@@ -231,9 +232,24 @@ class TikzPoint(Node):
     """
 
     def __str__(self):
+        children = _flatten(self.children)
         fmt = lambda x: f"{x:g}" if isinstance(x, float) else str(x)
-        child_string = ",".join(str(fmt(c)) for c in self.children if c is not None)
+        child_string = ",".join(str(fmt(c)) for c in children if c is not None)
         return f"({child_string})"
+
+
+
+def _flatten(x: list) -> list:
+    r = []
+    for y in x:
+        if isinstance(y, list):
+            r.extend(_flatten(y))
+        if isinstance(y, GeneratorType):
+            r.extend(_flatten(list(y)))
+        else:
+            r.append(y)
+    return r
+
 
 
 def find_errors_in_pdflatex_output(output: str, input_tex: str):
