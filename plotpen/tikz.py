@@ -141,7 +141,7 @@ def y_axis(yscale, box, ticks=None, format_fn=lambda x: f"{x:g}"):
                     "--",
                     point(box.x(0) - 2, box.y(yscale(tick))),
                     "node[anchor=east,inner xsep=2]",
-                    text(r"\tiny \textsf{"+format_fn(tick)+r"}"),
+                    text(r"\tiny \textsf{" + format_fn(tick) + r"}"),
                 )
                 for tick in ticks
             ),
@@ -160,11 +160,32 @@ def x_axis(xscale, box, ticks=None, format_fn=lambda x: f"{x:g}"):
                     "--",
                     point(box.x(xscale(tick)), box.y(0) + 2),
                     "node[anchor=north ]",
-                    text(r"\tiny \textsf{"+format_fn(tick)+r"}"),
+                    text(r"\tiny \textsf{" + format_fn(tick) + r"}"),
                 )
                 for tick in ticks
             ),
         )
+    )
+
+
+def plot(xx: list[float], yy: list[float], box, **kwargs):
+    return draw(
+        options(**kwargs),
+        g(
+            g(
+                "--" if i > 0 else None,
+                point(*box(x1, y1)),
+            )
+            for i, (x1, y1) in enumerate(zip(xx, yy))
+        ),
+    )
+
+
+def text_node(x, y, txt, **kwargs):
+    return node(**kwargs)(
+        "at",
+        point(x, y),
+        text(txt),
     )
 
 
@@ -178,8 +199,10 @@ def clipbox(children, box):
         *children,
     )
 
+
 def definecolor(name, color):
     return rf"\definecolor{{{name}}}{{HTML}}{{{color[1:]}}}"
+
 
 class TikzCommand(Node):
     """
@@ -239,7 +262,6 @@ class TikzPoint(Node):
         return f"({child_string})"
 
 
-
 def _flatten(x: list) -> list:
     r = []
     for y in x:
@@ -250,7 +272,6 @@ def _flatten(x: list) -> list:
         else:
             r.append(y)
     return r
-
 
 
 def find_errors_in_pdflatex_output(output: str, input_tex: str):
@@ -296,11 +317,13 @@ class TikzGraphics(Node):
 
     def __str__(self):
         attributes = {**self.attributes}
-        
+
         for attr in ("width", "height"):
             value = attributes.get(attr, None)
-            if value is not None and (isinstance(value, float) or isinstance(value, int)):
-                attributes[attr] = str(attributes[attr]/1.3283520133) + "pt"
+            if value is not None and (
+                isinstance(value, float) or isinstance(value, int)
+            ):
+                attributes[attr] = str(attributes[attr] / 1.3283520133) + "pt"
 
         kformat = lambda x: x.replace("_", " ")
         attr_string = ", ".join(f"{kformat(k)}={v}" for k, v in attributes.items())
