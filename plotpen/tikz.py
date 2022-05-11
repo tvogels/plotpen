@@ -32,7 +32,7 @@ class TikzFigure(Node):
                 r"\begin{document}",
                 r"\begin{tikzpicture}[yscale=-1,y=0.7528125pt,x=0.7528125pt]",
                 r"\clip (0,0) rectangle (%f, %f);" % (width, height),
-                "".join((str(c) + "\n") for c in self.children),
+                "".join((str(c) + "\n") for c in self.children if c is not None),
                 r"\end{tikzpicture}",
                 r"\end{document}",
             ]
@@ -187,7 +187,7 @@ class TikzCommand(Node):
     def __str__(self):
         kformat = lambda x: x.replace("_", " ")
         attr_string = ", ".join(f"{kformat(k)}={v}" for k, v in self.attributes.items())
-        child_string = " ".join(str(c) for c in self.children)
+        child_string = " ".join(str(c) for c in self.children if c is not None)
         return f"""\\{self.tag}[{attr_string}] {child_string};"""
 
 
@@ -197,7 +197,7 @@ class TikzGroup(Node):
     """
 
     def __str__(self):
-        return "\n".join(str(c) for c in self.children)
+        return "\n".join(str(c) for c in self.children if c is not None)
 
 
 class TikzText(Node):
@@ -206,7 +206,7 @@ class TikzText(Node):
     """
 
     def __str__(self):
-        return "{" + (" ".join(str(c) for c in self.children)) + "}"
+        return "{" + (" ".join(str(c) for c in self.children if c is not None)) + "}"
 
 
 class TikzEnv(Node):
@@ -219,7 +219,7 @@ class TikzEnv(Node):
     def __str__(self):
         return (
             rf"\begin{{{self.tag}}}"
-            + ("\n".join(str(c) for c in self.children))
+            + ("\n".join(str(c) for c in self.children if c is not None))
             + "\n"
             + rf"\end{{{self.tag}}}"
         )
@@ -232,7 +232,7 @@ class TikzPoint(Node):
 
     def __str__(self):
         fmt = lambda x: f"{x:g}" if isinstance(x, float) else str(x)
-        child_string = ",".join(str(fmt(c)) for c in self.children)
+        child_string = ",".join(str(fmt(c)) for c in self.children if c is not None)
         return f"({child_string})"
 
 
