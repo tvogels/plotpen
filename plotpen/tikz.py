@@ -158,7 +158,7 @@ def x_axis(xscale, box, ticks=None):
                     "--",
                     point(box.x(xscale(tick)), box.y(0) + 2),
                     "node[anchor=north ]",
-                    text(rf"\tiny \textsf{{ {tick/1000:g}\kern.3pt k }}"),
+                    text(rf"\tiny \textsf{{ {tick:g} }}"),
                 )
                 for tick in ticks
             ),
@@ -291,6 +291,12 @@ class TikzGraphics(Node):
         return f"""{{\\{self.tag}[{attr_string}]{child_string}}}"""
 
 
+class TikzOptions(Node):
+    def __str__(self):
+        kformat = lambda x: x.replace("_", " ")
+        attrs = [f"{kformat(k)}={v}" for k, v in self.attributes.items()]
+        return "[" + ",".join(str(c) for c in self.children + attrs) + "]"
+
 
 tikz = TikzFigure("tikz")
 fill = TikzCommand("fill")
@@ -302,3 +308,4 @@ text = TikzText("text")
 scope = TikzEnv("scope")
 g = TikzGroup("g")
 graphics = TikzGraphics("includegraphics")
+options = TikzOptions("options")

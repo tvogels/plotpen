@@ -21,7 +21,7 @@ class Figure(domtree.Node):
     def _repr_html_(self):
         b64 = base64.b64encode(str(self).encode("utf-8")).decode("ascii")
         html = (
-            r'<img src="data:image/svg+xml;base64,%s" style="background-color: white; max-width:100%%;" />'
+            r'<img src="data:image/svg+xml;base64,%s" style="background-color: white; max-width:100%%; margin: .5em 0;" />'
             % b64
         )
         return html
