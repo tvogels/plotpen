@@ -128,7 +128,7 @@ def grid(xscale, yscale, box, xticks=None, yticks=None):
     )
 
 
-def y_axis(yscale, box, ticks=None):
+def y_axis(yscale, box, ticks=None, format_fn=lambda x: f"{x:g}"):
     if ticks is None:
         ticks = yscale.ticks()
     return g(
@@ -139,7 +139,7 @@ def y_axis(yscale, box, ticks=None):
                     "--",
                     point(box.x(0) - 2, box.y(yscale(tick))),
                     "node[anchor=east,inner xsep=2]",
-                    text(rf"\tiny \textsf{{ {tick:g} }}"),
+                    text(r"\tiny \textsf{"+format_fn(tick)+r"}"),
                 )
                 for tick in ticks
             ),
@@ -147,7 +147,7 @@ def y_axis(yscale, box, ticks=None):
     )
 
 
-def x_axis(xscale, box, ticks=None):
+def x_axis(xscale, box, ticks=None, format_fn=lambda x: f"{x:g}"):
     if ticks is None:
         ticks = xscale.ticks()
     return g(
@@ -158,7 +158,7 @@ def x_axis(xscale, box, ticks=None):
                     "--",
                     point(box.x(xscale(tick)), box.y(0) + 2),
                     "node[anchor=north ]",
-                    text(rf"\tiny \textsf{{ {tick:g} }}"),
+                    text(r"\tiny \textsf{"+format_fn(tick)+r"}"),
                 )
                 for tick in ticks
             ),
