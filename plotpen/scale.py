@@ -1,5 +1,10 @@
 from math import ceil, floor, log as _log
-from typing import Any, Literal, Optional, TypeVar
+from typing import Any, Optional, TypeVar
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 import numpy as np
 from matplotlib.cm import get_cmap
