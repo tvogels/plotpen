@@ -1,3 +1,4 @@
+from __future__ import annotations
 from math import ceil, floor, log as _log
 from typing import Any, Optional, TypeVar
 
