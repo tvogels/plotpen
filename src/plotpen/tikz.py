@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import base64
 import os
 import re
@@ -33,7 +34,7 @@ class TikzFigure(Node):
                 preamble,
                 r"\begin{document}",
                 r"\begin{tikzpicture}[yscale=-1,y=0.7528125pt,x=0.7528125pt]",
-                r"\clip (0,0) rectangle (%f, %f);" % (width, height),
+                rf"\clip (0,0) rectangle ({width:f}, {height:f});",
                 "".join((str(c) + "\n") for c in self.children if c is not None),
                 r"\end{tikzpicture}",
                 r"\end{document}",
@@ -114,11 +115,11 @@ def grid(xscale, yscale, box, xticks=None, yticks=None):
         yticks = yscale.ticks()
     return g(
         g(
-            draw(color="lightgray!50")(
+            draw(color="lightgray!30")(
                 g(point(*box(0, yscale(tick))), "--", point(*box(1, yscale(tick))))
                 for tick in yticks
             ),
-            draw(color="lightgray!50")(
+            draw(color="lightgray!30")(
                 g(
                     point(*box(xscale(tick), 0)),
                     "--",
@@ -140,8 +141,10 @@ def y_axis(yscale, box, ticks=None, format_fn=lambda x: f"{x:g}"):
                     point(*box(0, yscale(tick))),
                     "--",
                     point(box.x(0) - 2, box.y(yscale(tick))),
-                    "node[anchor=east,inner xsep=2]",
-                    text(r"\tiny \textsf{" + format_fn(tick) + r"}"),
+                    g(
+                        "node[anchor=east,inner xsep=2]",
+                        text(r"\tiny \textsf{" + format_fn(tick) + r"}"),
+                    ),
                 )
                 for tick in ticks
             ),
@@ -205,7 +208,7 @@ def definecolor(name, color):
 
 
 class TikzCommand(Node):
-    """
+    r"""
     \$tag $children;
     """
 
@@ -238,7 +241,7 @@ class TikzEnv(Node):
     """
     \begin{$tag}
     [children]
-    \end{$tag}
+    \\end{$tag}
     """
 
     def __str__(self):

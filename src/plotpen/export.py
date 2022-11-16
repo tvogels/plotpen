@@ -18,9 +18,16 @@ def svg_to_pdf(svg: str, filename: str):
         fp.write(create_html(svg))
         fp.flush()
         subprocess.check_call(
-            [chrome, "--headless", "--disable-gpu", f"--print-to-pdf={filename}", fp.name],
+            [
+                chrome,
+                "--headless",
+                "--disable-gpu",
+                f"--print-to-pdf={filename}",
+                fp.name,
+            ],
             stderr=subprocess.DEVNULL,
         )
+
 
 def svg_to_png(svg, filename: str):
     """Convert SVG to PDF using headless Chrome"""
@@ -39,9 +46,18 @@ def svg_to_png(svg, filename: str):
         fp.write(create_html(svg))
         fp.flush()
         subprocess.check_output(
-            [chrome, "--headless", "--disable-gpu", "--force-device-scale-factor=2", f"--window-size={width},{height}", f"--screenshot={filename}", fp.name],
+            [
+                chrome,
+                "--headless",
+                "--disable-gpu",
+                "--force-device-scale-factor=2",
+                f"--window-size={width},{height}",
+                f"--screenshot={filename}",
+                fp.name,
+            ],
             stderr=subprocess.DEVNULL,
         )
+
 
 def locate_chrome_executable():
     chrome_options = [
@@ -56,7 +72,7 @@ def locate_chrome_executable():
             return option
 
     raise RuntimeError("Cannot find chrome")
-    
+
 
 def create_dir_if_inexistent(filename):
     dirname = os.path.dirname(os.path.realpath(filename))

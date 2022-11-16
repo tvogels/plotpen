@@ -1,5 +1,7 @@
 from __future__ import annotations
-from math import ceil, floor, log as _log
+
+from math import ceil, floor
+from math import log as _log
 from typing import Any, Optional, TypeVar
 
 try:
@@ -24,7 +26,7 @@ class ScaleLinear:
         self,
         min: float,
         max: float,
-        range: Optional[list[float]] = None,
+        range: list[float] | None = None,
     ):
         self.domain = [min, max]
         self.range = range
@@ -43,7 +45,7 @@ class ScaleLinear:
         min, max = self.domain
         return _ticks(min, max, count)
 
-    def nice(self) -> "ScaleLinear":
+    def nice(self) -> ScaleLinear:
         """Start and end the domain at nice round numbers"""
         return ScaleLinear(*nice_domain(self.domain), range=self.range)
 
@@ -56,7 +58,7 @@ class ScaleLog:
         self,
         min: float,
         max: float,
-        range: Optional[list[float]] = None,
+        range: list[float] | None = None,
         base: float = 10,
     ):
         self.domain = [min, max]
@@ -136,7 +138,7 @@ class ScaleLog:
         else:
             return z
 
-    def nice(self) -> "ScaleLog":
+    def nice(self) -> ScaleLog:
         """
         Start and end the domain at nice round numbers
         """

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import base64
 import random
 from io import BytesIO
@@ -6,15 +7,15 @@ from types import SimpleNamespace
 
 import domtree
 import numpy as np
+from flexbox import BoxResolved, box
 from matplotlib.cm import get_cmap
 from PIL import Image
-from yoga import box, BoxResolved
 
 import plotpen.colors as colors
 import plotpen.export as _export
 import plotpen.scale as scale
-from plotpen.markers import markers
 import plotpen.svg as svg
+from plotpen.markers import markers
 from plotpen.tex import tex
 
 
@@ -132,7 +133,12 @@ def translate(x: float, y: float) -> svg.G:
 
 
 def x_axis(
-    xscale, box: BoxResolved, color: str = "#1b1e23", ticks=None, scale: float = 1, **kwargs
+    xscale,
+    box: BoxResolved,
+    color: str = "#1b1e23",
+    ticks=None,
+    scale: float = 1,
+    **kwargs,
 ) -> svg.G:
     return svg.g(id="x-axis", **kwargs)(
         multi_vline(
@@ -152,7 +158,12 @@ def x_axis(
 
 
 def y_axis(
-    yscale, box: BoxResolved, color: str = "#1b1e23", scale: float = 1, ticks=None, **kwargs
+    yscale,
+    box: BoxResolved,
+    color: str = "#1b1e23",
+    scale: float = 1,
+    ticks=None,
+    **kwargs,
 ) -> svg.G:
     return svg.g(id="y-axis", **kwargs)(
         multi_hline(
@@ -173,7 +184,15 @@ def y_axis(
     )
 
 
-def grid(xscale, yscale, box: BoxResolved, grid_color="#f0f0f0", xticks=None, yticks=None, **kwargs) -> svg.G:
+def grid(
+    xscale,
+    yscale,
+    box: BoxResolved,
+    grid_color="#f0f0f0",
+    xticks=None,
+    yticks=None,
+    **kwargs,
+) -> svg.G:
     if xticks is None:
         xticks = xscale.ticks()
     if yticks is None:
@@ -238,7 +257,9 @@ def matrix_to_image(
     return img
 
 
-def matshow(array: np.ndarray, box: BoxResolved, cmap: str = "flare", autoscale: bool = False):
+def matshow(
+    array: np.ndarray, box: BoxResolved, cmap: str = "flare", autoscale: bool = False
+):
     resolution = int(max(box.height, box.width) * 3)
     img = matrix_to_image(array, cmap, autoscale=autoscale, resolution=resolution)
     return image(

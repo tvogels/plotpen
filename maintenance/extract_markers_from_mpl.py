@@ -1,8 +1,9 @@
 import json
-from matplotlib import pyplot as plt
 from io import BytesIO
-from matplotlib.lines import Line2D
 from xml.etree import ElementTree
+
+from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
 
 results = {}
 for marker, name in Line2D.markers.items():
@@ -11,7 +12,7 @@ for marker, name in Line2D.markers.items():
     print(name, marker)
     plt.plot(0, 0, marker=marker)
     plt.gca().axis("off")
-    buffer= BytesIO()
+    buffer = BytesIO()
     plt.savefig(buffer, format="svg")
     plt.close()
     buffer.seek(0)

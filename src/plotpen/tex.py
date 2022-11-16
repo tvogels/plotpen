@@ -1,8 +1,9 @@
-from matplotlib import pyplot as plt
-import matplotlib.font_manager
-import matplotlib
 from io import BytesIO
 from xml.etree import ElementTree
+
+import matplotlib
+import matplotlib.font_manager
+from matplotlib import pyplot as plt
 
 
 def tex(
@@ -15,7 +16,6 @@ def tex(
     y: float = 0.0,
 ):
     matplotlib.rcParams["text.usetex"] = True
-
 
     preamble = r"""
     \usepackage[utf8]{inputenc} % allow utf-8 input
@@ -117,9 +117,7 @@ def tex(
     xoffset += x
     yoffset += y
 
-    svg_string = ElementTree.tostring(
-        root, encoding="utf-8"
-    ).decode("utf-8")
+    svg_string = ElementTree.tostring(root, encoding="utf-8").decode("utf-8")
 
     return "".join(
         [
