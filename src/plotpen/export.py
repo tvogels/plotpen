@@ -44,9 +44,11 @@ def svg_to_png(svg, filename: str):
     width = ceil(svg.attributes["width"])
     height = ceil(svg.attributes["height"])
 
-    with tempfile.NamedTemporaryFile("w", suffix=".html") as fp:
-        fp.write(create_html(svg))
-        fp.flush()
+    try:
+        # I set delete=False to prevent a bug on Windows.
+        with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False) as fp:
+            fp.write(create_html(svg))
+
         subprocess.check_output(
             [
                 chrome,
@@ -59,6 +61,8 @@ def svg_to_png(svg, filename: str):
             ],
             stderr=subprocess.DEVNULL,
         )
+    finally:
+        os.unlink(fp.name)
 
 
 def locate_chrome_executable():
