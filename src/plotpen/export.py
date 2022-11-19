@@ -1,7 +1,9 @@
 import os
+import shutil
 import subprocess
 import tempfile
 from math import ceil
+from pathlib import Path
 
 
 def svg_to_pdf(svg: str, filename: str):
@@ -62,14 +64,16 @@ def svg_to_png(svg, filename: str):
 def locate_chrome_executable():
     chrome_options = [
         "google-chrome",
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         "chrome",
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path("C:/Program Files/Google/Chrome/Application/chrome.exe"),
+        Path("D:/Program Files/Google/Chrome/Application/chrome.exe"),
     ]
 
     for option in chrome_options:
-        rc = subprocess.call(["which", option], stdout=subprocess.DEVNULL)
-        if rc == 0:
-            return option
+        result = shutil.which(option)
+        if result is not None:
+            return result
 
     raise RuntimeError("Cannot find chrome")
 
