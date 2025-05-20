@@ -48,6 +48,7 @@ class TikzFigure(Node):
     def to_png(self, filename, dpi=96 * 4):
         with NamedTemporaryFile(suffix=".pdf", mode="wb") as pdffile:
             pdffile.write(pdflatex(str(self), tuple(self.embedded_files())))
+            pdffile.flush()
             image = convert_from_path(pdffile.name, dpi=dpi)[0]
 
         if filename is None:
@@ -63,7 +64,7 @@ class TikzFigure(Node):
         for node in self.all_nodes():
             if node != self and hasattr(node, "embedded_files"):
                 for filename, content in node.embedded_files():  # type: ignore
-                    if not filename in filenames:
+                    if filename not in filenames:
                         filenames.add(filename)
                         yield filename, content
 
