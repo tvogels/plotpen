@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import domtree
 import numpy as np
 from flexbox import BoxResolved, box
-from matplotlib.cm import get_cmap
+from matplotlib import colormaps
 from PIL import Image
 
 import plotpen.colors as colors
@@ -250,7 +250,7 @@ def matrix_to_image(
         array = array.astype(np.float64)
         array -= array.min()
         array /= array.max() + 1e-16
-    cm = get_cmap(cmap)
+    cm = colormaps[cmap]
     img = Image.fromarray(np.uint8(cm(np.clip(array, 0, 1)) * 255))  # type: ignore
     if resolution is not None:
         img = img.resize((resolution, resolution), Image.NEAREST)

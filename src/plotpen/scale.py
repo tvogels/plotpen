@@ -10,7 +10,7 @@ except ImportError:
     from typing_extensions import Literal
 
 import numpy as np
-from matplotlib.cm import get_cmap
+from matplotlib import colormaps
 from matplotlib.colors import rgb2hex
 
 from plotpen.ticks import nice_domain
@@ -164,7 +164,7 @@ class ScaleColor(ScaleLinear):
         Uniform palettes: rocket, mako, flare, crest, magma, viridis
         Diverging uniform palettes: vlag, icefire
         """
-        self.cmap = get_cmap(palette)
+        self.cmap = colormaps[palette]
         super().__init__(domain, *args, **kwargs)
 
     def __call__(self, value: T) -> Any:

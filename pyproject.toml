@@ -10,7 +10,7 @@ version = "0.0.4"
 readme = "README.md"
 requires-python = ">=3.7"
 license = { file = "LICENSE" }
-dependencies = ["typing_extensions>4", "flexbox>=0.0.1", "domtree>=0.0.5", "matplotlib"]
+dependencies = ["typing_extensions>4", "flexbox>=0.0.1", "domtree>=0.0.5", "matplotlib", "pdf2image"]
 optional-dependencies = { test = ["pytest"] }
 
 [project.urls]

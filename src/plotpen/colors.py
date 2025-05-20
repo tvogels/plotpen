@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from matplotlib import cm as mpl_cm
+from matplotlib import colormaps
 from matplotlib import colors
 
 tab10 = [
@@ -1723,9 +1723,9 @@ for _name, _lut in _lut_dict.items():
     _cmap = colors.ListedColormap(_lut, _name)
     _cmap_r = colors.ListedColormap(_lut[::-1], _name + "_r")
     try:
-        mpl_cm.register_cmap(_name, _cmap)
-        mpl_cm.register_cmap(_name + "_r", _cmap_r)
+        colormaps.register(_cmap, name=_name)
+        colormaps.register(_cmap_r, name=_name + "_r")
     except UserWarning:  # already defined
         pass
 
-del colors, mpl_cm, SimpleNamespace
+del colors, colormaps, SimpleNamespace
